@@ -18,7 +18,7 @@ DOIT Internal project to manage skill matrix
 - SQL Server DB
 - Entity Framework Core with code first
 - ASP.NET Api
-- Client (???)
+- Client React
 
 # Models
 
