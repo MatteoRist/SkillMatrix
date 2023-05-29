@@ -1,20 +1,27 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Introduction
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+DOIT Internal project to manage skill matrix
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+# Definition
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+- User login with AAD federation on DOIT tenant
+- A list of skills appear
+- For every skill, if a user mark that he/she knows it, a secondary section appear containing some detailed requests.
+    - Yeras of work (1,2,3,4,>=5)
+    - Level (1 only training,2,3,4,5 ninja)
+    - ...
+- A user can save in every moment
+- Every time the user opens up this dashboard it see the same skill assessment
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+# Tech
+
+- SQL Server DB
+- Entity Framework Core with code first
+- ASP.NET Api
+- Client (???)
+
+# Models
+
+- User: Id, Name, email
+- Skill: Id, UserId, Description, ....
+- Skill level: ID, SkillId, Type (Years of work, level, ecc...), Response
