@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using skill_matrix_api.Models.Skills;
+using skill_matrix_api.Entities;
+using skill_matrix_api.Services;
 
 namespace skill_matrix_api.Controllers
 {
@@ -7,20 +8,53 @@ namespace skill_matrix_api.Controllers
     [Route("api/skills")]
     public class SkillsController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<SkillDto>> GetSkills()
+        private readonly ISkillRepository _dataStore;
+
+        public SkillsController(ISkillRepository dataStore)
         {
-            return Ok(DataMapper.MapToDto(SkillsDataStore.Current.Skills));
+            _dataStore = dataStore;
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<SkillDto> GetSkill(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
         {
-            var skillToReturn = SkillsDataStore.Current.Skills.FirstOrDefault(c => c.SkillId == id);
+            return Ok(await _dataStore.GetSkillsAsync());
+        }
+
+        [HttpGet("{SkillId}", Name = "GetSkill")]
+        public async Task<ActionResult<Skill>> GetSkill(int SkillId)
+        {
+            var skillToReturn = await _dataStore.GetSkillAsync(SkillId);
 
             if (skillToReturn == null) { return NotFound(); }
 
-            return Ok(DataMapper.MapToDto(skillToReturn));
+            return Ok(skillToReturn);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Skill>> PostSkill([FromBody] Skill skill)
+        {
+            if(skill == null)
+                throw new ArgumentNullException(nameof(skill));
+
+            Skill result = await _dataStore.PostSkillAsync(skill);
+
+            await _dataStore.SaveChangesAsync();
+            
+            return CreatedAtRoute("GetSkill",
+                new { SkillId = result.SkillId },
+                result
+            );
+        }
+
+        [HttpDelete("{SkillId}")]
+        public async Task<ActionResult> DeleteSkill(int SkillId)
+        {
+            await _dataStore.DeleteSkillAsync(SkillId);
+
+            await _dataStore.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

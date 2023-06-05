@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using skill_matrix_api.Models.Users;
+using skill_matrix_api.Entities;
+using skill_matrix_api.Services;
 
 namespace skill_matrix_api.Controllers
 {
@@ -7,15 +8,22 @@ namespace skill_matrix_api.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
-        {
-            return Ok(DataMapper.MapToDto(UsersDataStore.Current.Users));
+        private readonly IUserRepository _dataStore;
+        public UsersController(IUserRepository dataStore) 
+        { 
+            _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<UserDto> getUser(int id) {
-            var userToReturn = UsersDataStore.Current.Users.FirstOrDefault(c => c.UserId == id);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            return Ok(await _dataStore.GetUsersAsync());
+        }
+
+        [HttpGet("{UserId}", Name = "GetUser")]
+        public async Task<ActionResult<User>> GetUser(int UserID)
+        {
+            var userToReturn = await _dataStore.GetUserAsync(UserID);
 
             if(userToReturn == null) { return NotFound(); }
 

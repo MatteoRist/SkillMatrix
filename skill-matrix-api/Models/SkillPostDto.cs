@@ -1,9 +1,9 @@
-﻿namespace skill_matrix_api.Models.Skills
+﻿namespace skill_matrix_api.Models
 {
-    public class Skill
+    public class SkillPostDto
     {
-        public int SkillId { get; set; }
         public string Category { get; set; } = string.Empty;
+
         public string Title { get; set; } = string.Empty;
     }
 }
