@@ -13,23 +13,5 @@ namespace skill_matrix_api.DbContexts
         public MatrixContext(DbContextOptions<MatrixContext> options) : base(options) 
         {  
         }
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Record>()
-        //        .HasOne(r => r.User)
-        //        .WithMany(u => u.Records)
-        //        .HasForeignKey(r => r.UserId);
-
-        //    modelBuilder.Entity<Record>()
-        //        .HasOne(r => r.Skill)
-        //        .WithMany(s => s.Records)
-        //        .HasForeignKey(r => r.SkillId);
-             
-        //    modelBuilder.Entity<Record>()
-        //        .HasOne(r => r.Question)
-        //        .WithMany(q => q.Records)
-        //        .HasForeignKey(r => r.QuestionId);
-        //}
     }
 }

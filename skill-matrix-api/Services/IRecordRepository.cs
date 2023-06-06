@@ -7,6 +7,10 @@ namespace skill_matrix_api.Services
         Task<int> DeleteRecordAsync(int RecordId);
         Task<Record?> GetRecordAsync(int RecordId);
         Task<IEnumerable<Record>> GetRecordsAsync();
-        Task<Record> PostRecordAsync(Record record);
+        Task PostRecordAsync(Record record);
+        Task PostRangeOfRecords(ICollection<Record> records);
+        Task<bool> UserExists(int UserId);
+        Task<bool> SkillExists(int SkillId);
+        Task<bool> QuestionExists(int QuestionId);
     }
 }

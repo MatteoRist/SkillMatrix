@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using skill_matrix_api.DbContexts;
 using skill_matrix_api.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddControllers(options =>
 {
     options.ReturnHttpNotAcceptable = true;
 }).AddXmlSerializerFormatters();
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -24,8 +26,10 @@ builder.Services.AddScoped<IRecordRepository, RecordRepository>();
 
 builder.Services.AddDbContext<MatrixContext>(
     dbContextOptions => 
-    dbContextOptions.UseSqlServer("Data Source=DELLTTRG1;Initial Catalog=skillsMatrix;Integrated Security=True;Trust Server Certificate=True"
+    dbContextOptions.UseSqlServer("Data Source=DELLTTRG1;Initial Catalog=skillMatrix;Integrated Security=True;Trust Server Certificate=True"
 ));
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -35,6 +39,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();

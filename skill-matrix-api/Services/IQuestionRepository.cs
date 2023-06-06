@@ -7,6 +7,6 @@ namespace skill_matrix_api.Services
         Task<int> DeleteQuestionAsync(int QuestionId);
         Task<Question?> GetQuestionAsync(int QuestionId);
         Task<IEnumerable<Question>> GetQuestionsAsync();
-        Task<Question> PostQuestionAsync(Question question);
+        Task PostQuestionAsync(Question question);
     }
 }

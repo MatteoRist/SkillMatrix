@@ -24,22 +24,9 @@ namespace skill_matrix_api.Services
             return await _context.Questions.ToListAsync();
         }
 
-        public async Task<Question> PostQuestionAsync(Question question)
+        public async Task PostQuestionAsync(Question question)
         {
-            EntityEntry<Question> entityEntry;
-
-            Question? oldQuestion = await _context.Questions.FirstOrDefaultAsync(s => s.QuestionId == question.QuestionId);
-
-            if (oldQuestion == null)
-            {
-                entityEntry = _context.Add<Question>(question);
-            }
-            else
-            {
-                entityEntry = _context.Update<Question>(question);
-            }
-
-            return entityEntry.Entity;
+            await _context.AddAsync<Question>(question);
         }
 
         public async Task<int> DeleteQuestionAsync(int QuestionId)

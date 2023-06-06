@@ -7,6 +7,6 @@ namespace skill_matrix_api.Services
         Task<int> DeleteSkillAsync(int SkillId);
         Task<Skill?> GetSkillAsync(int SkillId);
         Task<IEnumerable<Skill>> GetSkillsAsync();
-        Task<Skill> PostSkillAsync(Skill skill);
+        Task PostSkillAsync(Skill skill);
     }
 }

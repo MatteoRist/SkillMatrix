@@ -37,21 +37,22 @@ namespace skill_matrix_api.Controllers
             if (question == null)
                 throw new ArgumentNullException(nameof(question));
 
-            Question result = await _dataStore.PostQuestionAsync(question);
+            await _dataStore.PostQuestionAsync(question);
 
             await _dataStore.SaveChangesAsync();
 
             return CreatedAtRoute("GetQuestion",
-                new { QuestionId = result.QuestionId },
-                result
+                new { QuestionId = question.QuestionId },
+                question
             );
         }
 
         [HttpDelete("{QuestionId}")]
         public async Task<ActionResult> DeleteSkill(int QuestionId)
         {
-            await _dataStore.DeleteQuestionAsync(QuestionId);
-
+            if (await _dataStore.DeleteQuestionAsync(QuestionId) != 0)
+                return BadRequest(new { message = "The data your tring to delete does not exist" });
+           
             await _dataStore.SaveChangesAsync();
 
             return NoContent();

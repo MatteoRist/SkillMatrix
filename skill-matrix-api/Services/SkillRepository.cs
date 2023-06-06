@@ -24,22 +24,9 @@ namespace skill_matrix_api.Services
             return await _context.Skills.Where(c => c.SkillId == SkillId).FirstOrDefaultAsync();
         }
 
-        public async Task<Skill> PostSkillAsync(Skill skill)
+        public async Task PostSkillAsync(Skill skill)
         {
-            EntityEntry<Skill> entityEntry;
-
-            Skill? oldSkill = await _context.Skills.FirstOrDefaultAsync(s => s.SkillId == skill.SkillId);
-
-            if (oldSkill == null)
-            {
-                entityEntry = _context.Add<Skill>(skill);
-            }
-            else
-            {
-                entityEntry = _context.Update<Skill>(skill);
-            }
-
-            return entityEntry.Entity;
+            await _context.AddAsync<Skill>(skill);
         }
 
         public async Task<int> DeleteSkillAsync(int SkillId)

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Serialization;
+using System.Text.Json.Serialization;
 
 namespace skill_matrix_api.Entities
 {
@@ -17,6 +18,7 @@ namespace skill_matrix_api.Entities
         public string Email { get; set; } = string.Empty;
 
         [XmlIgnore]
+        [JsonIgnore]  
         public ICollection<Record> Records { get; set; } = new List<Record>();
     }
 }

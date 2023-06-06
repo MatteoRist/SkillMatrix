@@ -16,30 +16,30 @@ namespace skill_matrix_api.Services
 
         public async Task<Record?> GetRecordAsync(int RecordId)
         {
-            return await _context.Records.Where(q => q.RecordId == RecordId).FirstOrDefaultAsync();
+            return await _context.Records
+                .Include(r => r.User)
+                .Include(r => r.Skill)
+                .Include(r => r.Question)
+                .FirstOrDefaultAsync(q => q.RecordId == RecordId);
         }
 
         public async Task<IEnumerable<Record>> GetRecordsAsync()
         {
-            return await _context.Records.ToListAsync();
+            return await _context.Records
+                .Include(r => r.User)
+                .Include(r => r.Skill)
+                .Include(r => r.Question)
+                .ToListAsync();
         }
 
-        public async Task<Record> PostRecordAsync(Record record)
+        public async Task PostRecordAsync(Record record)
         {
-            EntityEntry<Record> entityEntry;
+            await _context.Records.AddAsync(record);
+        }
 
-            Record? oldRecord = await _context.Records.FirstOrDefaultAsync(s => s.RecordId == record.RecordId);
-
-            if (oldRecord == null)
-            {
-                entityEntry = _context.Add<Record>(record);
-            }
-            else
-            {
-                entityEntry = _context.Update<Record>(record);
-            }
-
-            return entityEntry.Entity;
+        public async Task PostRangeOfRecords(ICollection<Record> records)
+        {
+            await _context.Records.AddRangeAsync(records);
         }
 
         public async Task<int> DeleteRecordAsync(int RecordId)
@@ -55,6 +55,21 @@ namespace skill_matrix_api.Services
                 _context.Records.Remove(recordToDelete);
                 return 0;
             }
+        }
+
+        public async Task<bool> UserExists(int UserId)
+        {
+            return await _context.Users.AnyAsync(u => u.UserId == UserId);
+        }
+
+        public async Task<bool> SkillExists(int SkillId)
+        {
+            return await _context.Skills.AnyAsync(s => s.SkillId == SkillId);
+        }
+
+        public async Task<bool> QuestionExists(int QuestionId)
+        {
+            return await _context.Questions.AnyAsync(q => q.QuestionId == QuestionId);
         }
 
         public async Task<int> SaveChangesAsync()
