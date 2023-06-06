@@ -66,7 +66,7 @@ namespace Record_matrix_api.Controllers
         }
 
         [HttpPost("bulk")]
-        public async Task<ActionResult<RecordGetDto>> BulkPostRecords([FromBody] List<RecordPostDto> records)
+        public async Task<ActionResult<RecordPostDto>> BulkPostRecords([FromBody] List<RecordPostDto> records)
         {
             List<Record> finalData = _mapper.Map<List<Record>>(records);
 
@@ -80,22 +80,13 @@ namespace Record_matrix_api.Controllers
                     !await _dataStore.QuestionExists(record.QuestionId)
                     )
                 {
+                    RecordPostDto responseObject = _mapper.Map<RecordPostDto>(record);
                     return BadRequest(new { 
                         message = 
-                        $"One or more of the provided IDs do not exist in the database",
-                        record
+                        "One or more of the provided IDs do not exist in the database",
+                        responseObject
                     });
                 }
-            }
-
-            foreach (var record in finalData)
-            {
-                var userExists = await _dataStore.UserExists(record.UserId);
-                var skillExists = await _dataStore.SkillExists(record.SkillId);
-                var questionExists = await _dataStore.QuestionExists(record.QuestionId);
-
-                if (!userExists || !skillExists || !questionExists)
-                    return BadRequest(new { message = "One or more of the provided IDs do not exist in the database. Check record " });
             }
 
             await _dataStore.PostRangeOfRecords(finalData);
