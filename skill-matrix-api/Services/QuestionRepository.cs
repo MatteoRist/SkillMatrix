@@ -9,26 +9,34 @@ namespace skill_matrix_api.Services
     {
         private readonly MatrixContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the QuestionRepository class.
+        /// </summary>
+        /// <param name="context">The MatrixContext instance.</param>
         public QuestionRepository(MatrixContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <inheritdoc cref="IQuestionRepository.GetQuestionAsync"/>
         public async Task<Question?> GetQuestionAsync(int QuestionId)
         {
             return await _context.Questions.Where(q => q.QuestionId == QuestionId).FirstOrDefaultAsync();
         }
 
+        /// <inheritdoc cref="IQuestionRepository.GetQuestionsAsync"/>
         public async Task<IEnumerable<Question>> GetQuestionsAsync()
         {
             return await _context.Questions.ToListAsync();
         }
 
+        /// <inheritdoc cref="IQuestionRepository.PostQuestionAsync"/>
         public async Task PostQuestionAsync(Question question)
         {
             await _context.AddAsync<Question>(question);
         }
 
+        /// <inheritdoc cref="IQuestionRepository.DeleteQuestionAsync"/>
         public async Task<int> DeleteQuestionAsync(int QuestionId)
         {
             Question? questionToDelete = await _context.Questions.FirstOrDefaultAsync(s => s.QuestionId == QuestionId);
@@ -44,6 +52,7 @@ namespace skill_matrix_api.Services
             }
         }
 
+        /// <inheritdoc cref="IQuestionRepository.SaveChangesAsync"/>
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

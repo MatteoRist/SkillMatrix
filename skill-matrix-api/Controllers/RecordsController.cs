@@ -7,7 +7,8 @@ using skill_matrix_api.Services;
 namespace Record_matrix_api.Controllers
 {
     [ApiController]
-    [Route("api/records")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/records")]
     public class RecordsController : ControllerBase
     {
         private readonly IRecordRepository _dataStore;
@@ -21,12 +22,21 @@ namespace Record_matrix_api.Controllers
                 throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Retrieves a list of records.
+        /// </summary>
+        /// <returns>An action result containing the list of records.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecordGetDto>>> GetRecords()
         {
             return Ok(_mapper.Map<IEnumerable<RecordGetDto>>(await _dataStore.GetRecordsAsync()));
         }
 
+        /// <summary>
+        /// Retrieves a specific record by its ID.
+        /// </summary>
+        /// <param name="RecordId">The ID of the record to retrieve.</param>
+        /// <returns>An action result containing the retrieved record.</returns>
         [HttpGet("{RecordId}", Name = "GetRecord")]
         public async Task<ActionResult<RecordGetDto>> GetRecord(int RecordId)
         {
@@ -37,6 +47,11 @@ namespace Record_matrix_api.Controllers
             return Ok(_mapper.Map<RecordGetDto>(RecordToReturn));
         }
 
+        /// <summary>
+        /// Creates a new record.
+        /// </summary>
+        /// <param name="record">The record object to create.</param>
+        /// <returns>An action result containing the created record.</returns>
         [HttpPost]
         public async Task<ActionResult<RecordGetDto>> PostRecord([FromBody] RecordPostDto record)
         {
@@ -65,6 +80,12 @@ namespace Record_matrix_api.Controllers
             );
         }
 
+
+        /// <summary>
+        /// Creates multiple records in bulk.
+        /// </summary>
+        /// <param name="records">The list of record objects to create.</param>
+        /// <returns>An action result indicating the status of the bulk creation.</returns>
         [HttpPost("bulk")]
         public async Task<ActionResult<RecordPostDto>> BulkPostRecords([FromBody] List<RecordPostDto> records)
         {
@@ -96,7 +117,11 @@ namespace Record_matrix_api.Controllers
             return NoContent();
         }
 
-
+        /// <summary>
+        /// Deletes a specific record by its ID.
+        /// </summary>
+        /// <param name="RecordId">The ID of the record to delete.</param>
+        /// <returns>An action result indicating the status of the deletion.</returns>
         [HttpDelete("{RecordId}")]
         public async Task<ActionResult> DeleteRecord(int RecordId)
         {

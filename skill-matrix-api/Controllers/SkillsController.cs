@@ -5,7 +5,8 @@ using skill_matrix_api.Services;
 namespace skill_matrix_api.Controllers
 {
     [ApiController]
-    [Route("api/skills")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/skills")]
     public class SkillsController : ControllerBase
     {
         private readonly ISkillRepository _dataStore;
@@ -15,12 +16,21 @@ namespace skill_matrix_api.Controllers
             _dataStore = dataStore;
         }
 
+        /// <summary>
+        /// Retrieves a list of skills.
+        /// </summary>
+        /// <returns>An action result containing the list of skills.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
         {
             return Ok(await _dataStore.GetSkillsAsync());
         }
 
+        /// <summary>
+        /// Retrieves a specific skill by its ID.
+        /// </summary>
+        /// <param name="SkillId">The ID of the skill to retrieve.</param>
+        /// <returns>An action result containing the retrieved skill.</returns>
         [HttpGet("{SkillId}", Name = "GetSkill")]
         public async Task<ActionResult<Skill>> GetSkill(int SkillId)
         {
@@ -31,6 +41,11 @@ namespace skill_matrix_api.Controllers
             return Ok(skillToReturn);
         }
 
+        /// <summary>
+        /// Creates a new skill.
+        /// </summary>
+        /// <param name="skill">The skill object to create.</param>
+        /// <returns>An action result containing the created skill.</returns>
         [HttpPost]
         public async Task<ActionResult<Skill>> PostSkill([FromBody] Skill skill)
         {
@@ -47,6 +62,11 @@ namespace skill_matrix_api.Controllers
             );
         }
 
+        /// <summary>
+        /// Deletes a specific skill by its ID.
+        /// </summary>
+        /// <param name="SkillId">The ID of the skill to delete.</param>
+        /// <returns>An action result indicating the status of the deletion.</returns>
         [HttpDelete("{SkillId}")]
         public async Task<ActionResult> DeleteSkill(int SkillId)
         {
