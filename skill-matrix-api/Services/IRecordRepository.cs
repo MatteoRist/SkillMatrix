@@ -39,7 +39,7 @@ namespace skill_matrix_api.Services
         /// </summary>
         /// <param name="records">The collection of records to create.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        Task PostRangeOfRecords(ICollection<Record> records);
+        Task PostRangeOfRecordsAsync(ICollection<Record> records);
 
         /// <summary>
         /// Asynchronously checks if a user with the specified ID exists.

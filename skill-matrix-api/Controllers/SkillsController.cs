@@ -62,6 +62,24 @@ namespace skill_matrix_api.Controllers
             );
         }
 
+        [HttpPost("bulk")]
+        public async Task<ActionResult<Skill>> BulkPostSkill([FromBody] List<Skill> skills)
+        {
+            for (int i = 0; i < skills.Count; i++)
+            { 
+                var skill = skills[i];
+
+                if (skill == null)
+                    throw new ArgumentNullException(nameof(skill));
+            }
+
+            await _dataStore.PostRangeOfSkillsAsync(skills);
+
+            await _dataStore.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         /// <summary>
         /// Deletes a specific skill by its ID.
         /// </summary>

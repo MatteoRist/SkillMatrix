@@ -11,7 +11,7 @@ import { ColorModeContext, useMode } from "./theme";
 import { useEffect, useState } from 'react';
 import SideNav from './components/SideNav/SideNav';
 import { apiUrl, AppLinks } from './constants';
-import profilePic from './assets/pfp.jpg'
+import avatar from './assets/pfp.jpg'
 
 interface User {
     userID: number;
@@ -67,13 +67,13 @@ export default function App() {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <div className="app">
-                    <SideNav navItems={AppLinks} image={profilePic} />
+                    <SideNav navItems={AppLinks} avatar={avatar} />
                     <main className="content">
                         <Routes>
                             <Route path="login" element={<Login />} />
                             {
                                 isAuthenticated && userData && <>
-                                    <Route path="/" index element={<Home avatar={profilePic} userName={userData.name} userRole={userData.email} />} />
+                                    <Route path="/" index element={<Home avatar={avatar} userName={userData.name} userRole={userData.email} />} />
                                     <Route path="skills" element={<Skills />} />
                                     <Route path="profile" element={<Profile />} />
                                     <Route path="survey" element={<Survey />} />

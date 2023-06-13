@@ -15,6 +15,12 @@ namespace skill_matrix_api.Entities
         [MaxLength(1024)]
         public string Body { get; set; } = string.Empty;
 
+        [Required]
+        public int MinValue { get; set; } = 1;
+
+        [Required]
+        public int MaxValue { get; set; } = 5;
+
         [XmlIgnore]
         [JsonIgnore]
         public ICollection<Record> Records { get; set; } = new List<Record>();

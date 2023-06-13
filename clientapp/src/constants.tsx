@@ -23,7 +23,12 @@ const AppLinks: IAppLink[] = [
     { path: "/settings", name: "Settings", icon: <SettingsIcon />, directNavigation: true }
 ]
 
+const AppLinksDict : { [key: string]: IAppLink } = AppLinks.reduce((acc, link) => {
+    acc[link.name.toLowerCase()] = link;
+    return acc;
+}, {} as { [key: string]: IAppLink });
+
 const apiUrl = 'https://localhost:7207/api/v1.0/' //process.env.REACT_APP_API_URL;
 
 export type IAppLinks = typeof AppLinks
-export { AppLinks, apiUrl }
+export { AppLinks, AppLinksDict, apiUrl }

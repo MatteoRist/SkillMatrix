@@ -44,8 +44,8 @@ namespace skill_matrix_api.Services
             await _context.Records.AddAsync(record);
         }
 
-        /// <inheritdoc cref="IRecordRepository.PostRangeOfRecords"/>
-        public async Task PostRangeOfRecords(ICollection<Record> records)
+        /// <inheritdoc cref="IRecordRepository.PostRangeOfRecordsAsync"/>
+        public async Task PostRangeOfRecordsAsync(ICollection<Record> records)
         {
             await _context.Records.AddRangeAsync(records);
         }

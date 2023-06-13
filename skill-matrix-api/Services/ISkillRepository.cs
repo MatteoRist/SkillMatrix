@@ -33,5 +33,12 @@ namespace skill_matrix_api.Services
         /// <param name="skill">The skill object to create.</param>
         /// <returns>A task representing the asynchronous operation and containing the created skill.</returns>
         Task PostSkillAsync(Skill skill);
+
+        /// <summary>
+        /// Asynchronously creates a range of skills.
+        /// </summary>
+        /// <param name="skills">The collection of skills to create.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        Task PostRangeOfSkillsAsync(ICollection<Skill> skills);
     }
 }

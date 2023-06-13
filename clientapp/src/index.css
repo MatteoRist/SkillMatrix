@@ -8,22 +8,12 @@ body,
     height: 100%;
     width: 100%;
     font-family: "Source Sans Pro", sans-serif;
+    overflow: auto;
 }
 
 .app {
     display: flex;
     position: relative;
-}
-
-.avatarIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.avatarIcon img{
-    cursor: pointer;
-    border-radius: 50%
 }
 
 ::-webkit-scrollbar {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
@@ -9,10 +9,10 @@ import { IAppLinks } from "../../constants";
 
 interface SideNavProps {
     navItems: IAppLinks
-    image: string
+    avatar: string
 }
 
-const SideNav: React.FC<SideNavProps> = ({ navItems, image }) => {
+const SideNav: React.FC<SideNavProps> = ({ navItems, avatar }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -68,13 +68,11 @@ const SideNav: React.FC<SideNavProps> = ({ navItems, image }) => {
 
                     {!isCollapsed && (
                         <Box mb="25px">
-                            <Box className="avatarIcon">
-                                <img
-                                    alt="profile-user"
-                                    width="100px"
-                                    height="100px"
-                                    src={image}
-                                />
+                            <Box display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                            >
+                                <Avatar src={avatar} sx={{ width: 100, height: 100 }} />
                             </Box>
                             <Box textAlign="center">
                                 <Typography

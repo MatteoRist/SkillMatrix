@@ -66,7 +66,14 @@ namespace Record_matrix_api.Controllers
             if (!userExists || !skillExists || !questionExists)
                 return BadRequest(new { message = "One or more of the provided IDs do not exist in the database." });
 
-            var finalRecord = _mapper.Map<Record>(record);
+            Record finalRecord = _mapper.Map<Record>(record);
+
+            // Check if value is inside limits
+            finalRecord.Question = null!; //tell compiler Question is not null
+
+            if (finalRecord.Question.MinValue > finalRecord.value ||
+                finalRecord.Question.MaxValue < finalRecord.value)
+                return BadRequest(new { message = "Value is outside question limits" });
 
             await _dataStore.PostRecordAsync(finalRecord);
 
@@ -94,6 +101,7 @@ namespace Record_matrix_api.Controllers
             for (int i = 0; i < finalData.Count; i++)
             {
                 var record  = finalData[i];
+                record.Question = null!; //tell compiler Question is not null
 
                 if (
                     !await _dataStore.UserExists(record.UserId) || 
@@ -108,9 +116,13 @@ namespace Record_matrix_api.Controllers
                         responseObject
                     });
                 }
+                // Check if value is inside limits
+                else if (record.Question.MinValue > record.value ||
+                    record.Question.MaxValue < record.value) 
+                    return BadRequest(new { message = "Value is outside question limits" });
             }
 
-            await _dataStore.PostRangeOfRecords(finalData);
+            await _dataStore.PostRangeOfRecordsAsync(finalData);
 
             await _dataStore.SaveChangesAsync();
 
