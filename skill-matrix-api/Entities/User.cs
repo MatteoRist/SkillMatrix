@@ -16,9 +16,5 @@ namespace skill_matrix_api.Entities
         public string Name { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;
-
-        [XmlIgnore]
-        [JsonIgnore]  
-        public ICollection<Record> Records { get; set; } = new List<Record>();
     }
 }

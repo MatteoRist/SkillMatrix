@@ -40,27 +40,5 @@ namespace skill_matrix_api.Services
         /// <param name="records">The collection of records to create.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
         Task PostRangeOfRecordsAsync(ICollection<Record> records);
-
-        /// <summary>
-        /// Asynchronously checks if a user with the specified ID exists.
-        /// </summary>
-        /// <param name="UserId">The ID of the user to check.</param>
-        /// <returns>A task representing the asynchronous operation and containing a boolean indicating if the user exists.</returns>
-        Task<bool> UserExists(int UserId);
-
-
-        /// <summary>
-        /// Asynchronously checks if a skill with the specified ID exists.
-        /// </summary>
-        /// <param name="SkillId">The ID of the skill to check.</param>
-        /// <returns>A task representing the asynchronous operation and containing a boolean indicating if the skill exists.</returns>
-        Task<bool> SkillExists(int SkillId);
-
-        /// <summary>
-        /// Asynchronously checks if a question with the specified ID exists.
-        /// </summary>
-        /// <param name="QuestionId">The ID of the question to check.</param>
-        /// <returns>A task representing the asynchronous operation and containing a boolean indicating if the question exists.</returns>
-        Task<bool> QuestionExists(int QuestionId);
     }
 }

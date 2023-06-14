@@ -11,15 +11,25 @@ namespace Record_matrix_api.Controllers
     [Route("api/v{version:apiVersion}/records")]
     public class RecordsController : ControllerBase
     {
-        private readonly IRecordRepository _dataStore;
-        private readonly IMapper _mapper;
+        private readonly IRecordRepository _recordRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly ISkillRepository _skillRepo;
+        private readonly IQuestionRepository _questionRepo;
 
-        public RecordsController(IRecordRepository dataStore, IMapper mapper)
+        public RecordsController(IRecordRepository recordRepo, 
+            IUserRepository userRepo, 
+            ISkillRepository skillRepo,
+            IQuestionRepository questionRepo
+            )
         {
-            _dataStore = dataStore ??
-                throw new ArgumentNullException(nameof(dataStore));
-            _mapper = mapper ??
-                throw new ArgumentNullException(nameof(mapper));
+            _recordRepo = recordRepo ??
+                throw new ArgumentNullException(nameof(recordRepo));
+            _userRepo = userRepo ??
+                throw new ArgumentNullException(nameof(userRepo));
+            _skillRepo = skillRepo ??
+                throw new ArgumentNullException(nameof(skillRepo));
+            _questionRepo = questionRepo ??
+                throw new ArgumentNullException(nameof(questionRepo));
         }
 
         /// <summary>
@@ -27,9 +37,12 @@ namespace Record_matrix_api.Controllers
         /// </summary>
         /// <returns>An action result containing the list of records.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecordGetDto>>> GetRecords()
+        public async Task<ActionResult<IEnumerable<Record>>> GetRecords()
         {
-            return Ok(_mapper.Map<IEnumerable<RecordGetDto>>(await _dataStore.GetRecordsAsync()));
+            // get records
+            IEnumerable<Record> records = await _recordRepo.GetRecordsAsync();
+
+            return Ok(records);
         }
 
         /// <summary>
@@ -38,13 +51,15 @@ namespace Record_matrix_api.Controllers
         /// <param name="RecordId">The ID of the record to retrieve.</param>
         /// <returns>An action result containing the retrieved record.</returns>
         [HttpGet("{RecordId}", Name = "GetRecord")]
-        public async Task<ActionResult<RecordGetDto>> GetRecord(int RecordId)
+        public async Task<ActionResult<Record>> GetRecord(int RecordId)
         {
-            var RecordToReturn = await _dataStore.GetRecordAsync(RecordId);
+            // get record
+            var record = await _recordRepo.GetRecordAsync(RecordId);
 
-            if (RecordToReturn == null) { return NotFound(); }
+            // check record
+            if (record == null) { return NotFound(); }
 
-            return Ok(_mapper.Map<RecordGetDto>(RecordToReturn));
+            return Ok(record);
         }
 
         /// <summary>
@@ -53,37 +68,47 @@ namespace Record_matrix_api.Controllers
         /// <param name="record">The record object to create.</param>
         /// <returns>An action result containing the created record.</returns>
         [HttpPost]
-        public async Task<ActionResult<RecordGetDto>> PostRecord([FromBody] RecordPostDto record)
+        public async Task<ActionResult<RecordGetDto>> PostRecord([FromBody] Record record)
         {
             if (record == null)
                 throw new ArgumentNullException(nameof(record));
 
-            // Check if User, Skill, and Question exist
-            var userExists = await _dataStore.UserExists(record.UserId);
-            var skillExists = await _dataStore.SkillExists(record.SkillId);
-            var questionExists = await _dataStore.QuestionExists(record.QuestionId);
+            string? badRequestMessage = null;
+            if (await _userRepo.GetUserAsync(record.UserId) == null)
+            {
+                badRequestMessage = "The userId provided does not exist";
+            }
 
-            if (!userExists || !skillExists || !questionExists)
-                return BadRequest(new { message = "One or more of the provided IDs do not exist in the database." });
+            if (await _skillRepo.GetSkillAsync(record.SkillId) == null)
+            {
+                badRequestMessage = "The SkillId provided does not exist";
+            }
 
-            Record finalRecord = _mapper.Map<Record>(record);
+            Question? question = await _questionRepo.GetQuestionAsync(record.QuestionId);
+            if (question == null)
+            {
+                badRequestMessage = "The QuestionId provided does not exist";
+            }
+            else if (question.MinValue > record.Value ||
+                question.MaxValue < record.Value)
+            {
+                badRequestMessage = "Value is outside question limits";
+            }
 
-            // Check if value is inside limits
-            finalRecord.Question = null!; //tell compiler Question is not null
+            if (badRequestMessage != null)
+                return BadRequest(new
+                {
+                    message = badRequestMessage,
+                    record
+                });
 
-            if (finalRecord.Question.MinValue > finalRecord.value ||
-                finalRecord.Question.MaxValue < finalRecord.value)
-                return BadRequest(new { message = "Value is outside question limits" });
+            await _recordRepo.PostRecordAsync(record);
 
-            await _dataStore.PostRecordAsync(finalRecord);
-
-            await _dataStore.SaveChangesAsync();
-
-            var createdRecord = _mapper.Map<RecordGetDto>(finalRecord);
+            await _recordRepo.SaveChangesAsync();
 
             return CreatedAtRoute("GetRecord",
-                new { RecordId = createdRecord.RecordId },
-                createdRecord
+                new { RecordId = record.RecordId },
+                record
             );
         }
 
@@ -94,37 +119,45 @@ namespace Record_matrix_api.Controllers
         /// <param name="records">The list of record objects to create.</param>
         /// <returns>An action result indicating the status of the bulk creation.</returns>
         [HttpPost("bulk")]
-        public async Task<ActionResult<RecordPostDto>> BulkPostRecords([FromBody] List<RecordPostDto> records)
+        public async Task<ActionResult<RecordPostDto>> BulkPostRecords([FromBody] List<Record> records)
         {
-            List<Record> finalData = _mapper.Map<List<Record>>(records);
-
-            for (int i = 0; i < finalData.Count; i++)
+            for (int i = 0; i < records.Count; i++)
             {
-                var record  = finalData[i];
-                record.Question = null!; //tell compiler Question is not null
+                var record  = records[i];
 
-                if (
-                    !await _dataStore.UserExists(record.UserId) || 
-                    !await _dataStore.SkillExists(record.SkillId) ||
-                    !await _dataStore.QuestionExists(record.QuestionId)
-                    )
+                string? badRequestMessage = null;
+                if (await _userRepo.GetUserAsync(record.UserId) == null)
                 {
-                    RecordPostDto responseObject = _mapper.Map<RecordPostDto>(record);
-                    return BadRequest(new { 
-                        message = 
-                        "One or more of the provided IDs do not exist in the database",
-                        responseObject
-                    });
+                    badRequestMessage = "The userId provided does not exist";
                 }
-                // Check if value is inside limits
-                else if (record.Question.MinValue > record.value ||
-                    record.Question.MaxValue < record.value) 
-                    return BadRequest(new { message = "Value is outside question limits" });
+
+                if (await _skillRepo.GetSkillAsync(record.SkillId) == null)
+                {
+                    badRequestMessage = "The SkillId provided does not exist";
+                }
+
+                Question? question = await _questionRepo.GetQuestionAsync(record.QuestionId);
+                if (question == null)
+                {
+                    badRequestMessage = "The QuestionId provided does not exist";
+                }
+                else if (question.MinValue > record.Value ||
+                    question.MaxValue < record.Value)
+                {
+                    badRequestMessage = "Value is outside question limits";
+                }
+
+                if (badRequestMessage != null)
+                    return BadRequest(new
+                    {
+                        message = badRequestMessage,
+                        record
+                    });
             }
 
-            await _dataStore.PostRangeOfRecordsAsync(finalData);
+            await _recordRepo.PostRangeOfRecordsAsync(records);
 
-            await _dataStore.SaveChangesAsync();
+            await _recordRepo.SaveChangesAsync();
 
             return NoContent();
         }
@@ -137,10 +170,10 @@ namespace Record_matrix_api.Controllers
         [HttpDelete("{RecordId}")]
         public async Task<ActionResult> DeleteRecord(int RecordId)
         {
-            if (await _dataStore.DeleteRecordAsync(RecordId) != 0)
+            if (await _recordRepo.DeleteRecordAsync(RecordId) != 0)
                 return BadRequest(new { message = "The data your tring to delete does not exist" });
 
-            await _dataStore.SaveChangesAsync();
+            await _recordRepo.SaveChangesAsync();
 
             return NoContent();
         }

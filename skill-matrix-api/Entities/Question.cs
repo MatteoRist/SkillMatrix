@@ -20,9 +20,5 @@ namespace skill_matrix_api.Entities
 
         [Required]
         public int MaxValue { get; set; } = 5;
-
-        [XmlIgnore]
-        [JsonIgnore]
-        public ICollection<Record> Records { get; set; } = new List<Record>();
     }
 }

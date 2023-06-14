@@ -22,9 +22,6 @@ namespace skill_matrix_api.Services
         public async Task<Record?> GetRecordAsync(int RecordId)
         {
             return await _context.Records
-                .Include(r => r.User)
-                .Include(r => r.Skill)
-                .Include(r => r.Question)
                 .FirstOrDefaultAsync(q => q.RecordId == RecordId);
         }
 
@@ -32,9 +29,6 @@ namespace skill_matrix_api.Services
         public async Task<IEnumerable<Record>> GetRecordsAsync()
         {
             return await _context.Records
-                .Include(r => r.User)
-                .Include(r => r.Skill)
-                .Include(r => r.Question)
                 .ToListAsync();
         }
 
@@ -64,24 +58,6 @@ namespace skill_matrix_api.Services
                 _context.Records.Remove(recordToDelete);
                 return 0;
             }
-        }
-
-        /// <inheritdoc cref="IRecordRepository.UserExists"/>
-        public async Task<bool> UserExists(int UserId)
-        {
-            return await _context.Users.AnyAsync(u => u.UserId == UserId);
-        }
-
-        /// <inheritdoc cref="IRecordRepository.SkillExists"/>
-        public async Task<bool> SkillExists(int SkillId)
-        {
-            return await _context.Skills.AnyAsync(s => s.SkillId == SkillId);
-        }
-
-        /// <inheritdoc cref="IRecordRepository.QuestionExists"/>
-        public async Task<bool> QuestionExists(int QuestionId)
-        {
-            return await _context.Questions.AnyAsync(q => q.QuestionId == QuestionId);
         }
 
         /// <inheritdoc cref="IRecordRepository.SaveChangesAsync"/>

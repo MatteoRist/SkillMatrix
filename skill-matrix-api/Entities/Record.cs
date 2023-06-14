@@ -14,22 +14,22 @@ namespace skill_matrix_api.Entities
         [Required]
         public int UserId { get; set; }
 
-        [ForeignKey("UserId")]
-        public User? User { get; set; }
+        //[ForeignKey("UserId")]
+        //public User? User { get; set; }
 
         [Required]
         public int SkillId { get; set; }
 
-        [ForeignKey("SkillId")]
-        public Skill? Skill { get; set; }
+        //[ForeignKey("SkillId")]
+        //public Skill? Skill { get; set; }
 
         [Required]
         public int QuestionId { get; set; }
 
-        [ForeignKey("QuestionId")]
-        public Question? Question { get; set; }
+        //[ForeignKey("QuestionId")]
+        //public Question? Question { get; set; }
 
         [Required]
-        public int value { get; set; }
+        public int Value { get; set; }
     } 
 }

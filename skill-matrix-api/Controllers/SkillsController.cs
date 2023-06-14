@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using skill_matrix_api.Entities;
+using skill_matrix_api.Models;
 using skill_matrix_api.Services;
 
 namespace skill_matrix_api.Controllers
@@ -9,11 +11,13 @@ namespace skill_matrix_api.Controllers
     [Route("api/v{version:apiVersion}/skills")]
     public class SkillsController : ControllerBase
     {
-        private readonly ISkillRepository _dataStore;
+        private readonly ISkillRepository _skillRepo;
+        private readonly ICategoryRepository _categoryRepo;
 
-        public SkillsController(ISkillRepository dataStore)
+        public SkillsController(ISkillRepository skillRepo, ICategoryRepository categoryRepo)
         {
-            _dataStore = dataStore;
+            _skillRepo = skillRepo;
+            _categoryRepo = categoryRepo;
         }
 
         /// <summary>
@@ -23,7 +27,10 @@ namespace skill_matrix_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
         {
-            return Ok(await _dataStore.GetSkillsAsync());
+            // get skills
+            IEnumerable<Skill> skills = await _skillRepo.GetSkillsAsync();
+
+            return Ok(skills);
         }
 
         /// <summary>
@@ -34,11 +41,13 @@ namespace skill_matrix_api.Controllers
         [HttpGet("{SkillId}", Name = "GetSkill")]
         public async Task<ActionResult<Skill>> GetSkill(int SkillId)
         {
-            var skillToReturn = await _dataStore.GetSkillAsync(SkillId);
+            // get skill
+            var skill = await _skillRepo.GetSkillAsync(SkillId);
 
-            if (skillToReturn == null) { return NotFound(); }
+            // check if skill exists
+            if (skill == null) { return NotFound(); }
 
-            return Ok(skillToReturn);
+            return Ok(skill);
         }
 
         /// <summary>
@@ -52,9 +61,15 @@ namespace skill_matrix_api.Controllers
             if(skill == null)
                 throw new ArgumentNullException(nameof(skill));
 
-            await _dataStore.PostSkillAsync(skill);
+            // Check if Category exist
+            var categoryExists = await _categoryRepo.GetCategoryAsync(skill.CategoryId);
 
-            await _dataStore.SaveChangesAsync();
+            if (categoryExists == null)
+                return BadRequest(new { message = "One or more of the provided IDs do not exist in the database." });
+
+            await _skillRepo.PostSkillAsync(skill);
+
+            await _skillRepo.SaveChangesAsync();
             
             return CreatedAtRoute("GetSkill",
                 new { SkillId = skill.SkillId },
@@ -71,11 +86,17 @@ namespace skill_matrix_api.Controllers
 
                 if (skill == null)
                     throw new ArgumentNullException(nameof(skill));
+
+                // Check if Category exist
+                var categoryExists = await _categoryRepo.GetCategoryAsync(skill.CategoryId);
+
+                if (categoryExists == null)
+                    return BadRequest(new { message = "One or more of the provided IDs do not exist in the database." });
             }
 
-            await _dataStore.PostRangeOfSkillsAsync(skills);
+            await _skillRepo.PostRangeOfSkillsAsync(skills);
 
-            await _dataStore.SaveChangesAsync();
+            await _skillRepo.SaveChangesAsync();
 
             return NoContent();
         }
@@ -88,10 +109,10 @@ namespace skill_matrix_api.Controllers
         [HttpDelete("{SkillId}")]
         public async Task<ActionResult> DeleteSkill(int SkillId)
         {
-            if (await _dataStore.DeleteSkillAsync(SkillId) != 0)
+            if (await _skillRepo.DeleteSkillAsync(SkillId) != 0)
                 return BadRequest(new { message = "The data your tring to delete does not exist" });
 
-            await _dataStore.SaveChangesAsync();
+            await _skillRepo.SaveChangesAsync();
 
             return NoContent();
         }
