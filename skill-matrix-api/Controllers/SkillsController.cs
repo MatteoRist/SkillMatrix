@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using skill_matrix_api.Entities;
-using skill_matrix_api.Models;
 using skill_matrix_api.Services;
 
 namespace skill_matrix_api.Controllers

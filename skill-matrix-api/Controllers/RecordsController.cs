@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using skill_matrix_api.Entities;
-using skill_matrix_api.Models;
 using skill_matrix_api.Services;
 
 namespace Record_matrix_api.Controllers
@@ -68,7 +66,7 @@ namespace Record_matrix_api.Controllers
         /// <param name="record">The record object to create.</param>
         /// <returns>An action result containing the created record.</returns>
         [HttpPost]
-        public async Task<ActionResult<RecordGetDto>> PostRecord([FromBody] Record record)
+        public async Task<ActionResult<Record>> PostRecord([FromBody] Record record)
         {
             if (record == null)
                 throw new ArgumentNullException(nameof(record));
@@ -119,7 +117,7 @@ namespace Record_matrix_api.Controllers
         /// <param name="records">The list of record objects to create.</param>
         /// <returns>An action result indicating the status of the bulk creation.</returns>
         [HttpPost("bulk")]
-        public async Task<ActionResult<RecordPostDto>> BulkPostRecords([FromBody] List<Record> records)
+        public async Task<ActionResult<Record>> BulkPostRecords([FromBody] List<Record> records)
         {
             for (int i = 0; i < records.Count; i++)
             {
