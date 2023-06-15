@@ -1,3 +1,5 @@
+// Declaration of gloabls
+
 declare interface User {
     userID: number;
     name: string;

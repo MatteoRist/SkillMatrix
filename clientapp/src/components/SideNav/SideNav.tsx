@@ -5,7 +5,7 @@ import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import NavItem from "./NavItem";
-import { IAppLinks } from "../../constants";
+import { IAppLinks } from "../../routingData";
 
 interface SideNavProps {
     navItems: IAppLinks

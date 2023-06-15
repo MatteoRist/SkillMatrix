@@ -6,10 +6,12 @@ import Surveys from './components/Pages/Surveys';
 import Profile from './components/Pages/Profile';
 import Skills from './components/Pages/Skills';
 import SideNav from './components/SideNav/SideNav';
-import { apiUrl, AppLinks } from './constants';
+import { AppLinks } from './routingData';
 import avatar from './assets/pfp.jpg';
 import { useMatrixApi } from './useMatrixApi';
 import SingleSurvey from './components/Pages/SingleSurvey';
+import { apiUrl } from './constants'
+import { Box } from '@mui/material';
 
 const AppPages = () => {
 
@@ -22,7 +24,11 @@ const AppPages = () => {
     return (
         <div className="app">
             <SideNav navItems={AppLinks} avatar={avatar} />
-            <main className="content">
+            <Box
+                component="main"
+                className="content"
+                sx={{p: 3}}                    
+            >
                 <Routes>
                     <Route path="login" element={<Login />} />
                     {
@@ -38,7 +44,7 @@ const AppPages = () => {
                     }
                     <Route path="*" element={<NoPage />} />
                 </Routes>
-            </main>
+            </Box>
         </div>
     )
 }

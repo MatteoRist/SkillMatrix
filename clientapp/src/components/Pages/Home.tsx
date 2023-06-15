@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { tokens } from '../../theme';
 import RadarChart from '../RadarChart/RadarChart';
-import { AppLinksDict } from '../../constants';
+import { AppLinksDict } from '../../routingData';
 
 
 // define props
@@ -21,7 +21,7 @@ const Home: FC<HomeProps> = ({ avatar, userName, userRole }) => {
 
     return (
         userName && userRole ? (
-            <Grid container spacing={4} sx={{ p: 3 }}>
+            <Grid container spacing={4}>
                 {/* Profile data section */}
                 <Grid item xs={12} container alignItems="center" spacing={2}>
                     <Grid item component={Link} to={AppLinksDict['profile'].path} >

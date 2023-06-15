@@ -36,7 +36,7 @@ const SingleSurvey: React.FC<SingleSurveyProps> = ({ questions }) => {
     const optionsRange = question.maxValue - question.minValue + 1;
 
     return (
-        <Box sx={{ m: 5 }}>
+        <Box sx={{ m: 3 }}>
             <Typography variant="h4">{skill}</Typography>
             <Typography variant="body1">{question.body}</Typography>
             {

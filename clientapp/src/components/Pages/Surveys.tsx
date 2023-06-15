@@ -1,6 +1,6 @@
 import { Box, Card, CardActionArea, CardContent, Grid, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
-import { AppLinksDict } from "../../constants";
+import { AppLinksDict } from "../../routingData";
 
 interface SurveyProps {
     skills: Category[];
@@ -8,7 +8,7 @@ interface SurveyProps {
 
 const Surveys: React.FC<SurveyProps> = ({ skills }) => {
     return (
-        <div>
+        <Box sx={{m: 2}}>
             {skills.map((category) => (
                 <div key={category.categoryId}>
                     <Typography variant="h2">{category.name}</Typography>
@@ -31,7 +31,7 @@ const Surveys: React.FC<SurveyProps> = ({ skills }) => {
                     </Grid>
                 </div>
             ))}
-        </div>
+        </Box>
     );
 };
 
