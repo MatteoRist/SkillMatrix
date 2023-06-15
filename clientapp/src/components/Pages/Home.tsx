@@ -58,14 +58,14 @@ const Home: FC<HomeProps> = ({ avatar, userName, userRole }) => {
                 {/* Surveys Portal */}
                 <Grid item xs={6}>
                     <Card>
-                        <CardActionArea component={Link} to={AppLinksDict['survey'].path} >
+                        <CardActionArea component={Link} to={AppLinksDict['surveys'].path} >
                             <CardContent>
                                 <Box display="flex" flexDirection="column" alignItems="center">
                                     {
-                                        AppLinksDict['survey'].icon
+                                        AppLinksDict['surveys'].icon
                                     }
                                     <Typography variant="h5" component="div" gutterBottom>
-                                        {AppLinksDict['survey'].name}
+                                        {AppLinksDict['surveys'].name}
                                     </Typography>
                                     <Typography variant="h6" color={colors.grey[100]}>
                                         Check out new surveys
@@ -83,66 +83,3 @@ const Home: FC<HomeProps> = ({ avatar, userName, userRole }) => {
 }
 
 export default Home;
-
-
-
-//import React, { useEffect, useState } from 'react';
-
-//const apiUrl = 'https://localhost:7207/api/v1.0/' //process.env.REACT_APP_API_URL;
-
-////console.log(process)
-////console.log(process.env)
-////console.log(process.env.REACT_APP_API_URL)
-
-//const Home: React.FC = () => {
-//    const [records, setRecords] = useState<Record[]>([])
-
-//    useEffect(() => {
-//        fetch(`${apiUrl}records`)
-//            .then((response) => response.json())
-//            .then((data) => {
-//                // Check if response status is 4xx or 5xx
-//                if (data.status >= 400 && data.status <= 599) {
-//                    // create an error and reject it
-//                    return Promise.reject(`HTTP Error: ${data.status}, details: ${data.details}`);
-//                }
-//                setRecords(data as Record[])
-//            })
-//            .catch((error) => console.error("Error:", error));
-//    }, [])
-
-//    return (
-//        <main>
-//            {
-//               <div>Loading...{records.length}</div>
-//            }
-//        </main>
-//    )
-//}
-
-//type User = {
-//    userID: number;
-//    name: string;
-//    email: string;
-//}
-
-//type Skill = {
-//    skilId: number;
-//    title: string;
-//    category: string;
-//}
-
-//type Question = {
-//    questionId: number;
-//    body: string;
-//}
-
-//type Record = {
-//    recordId: number;
-//    user: User;
-//    skill: Skill;
-//    question: Question;
-//}
-
-
-//export default Home;
