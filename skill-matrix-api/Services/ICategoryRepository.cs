@@ -24,8 +24,21 @@ namespace skill_matrix_api.Services
         /// <summary>
         /// Asynchronously retrieves a list of category.
         /// </summary>
-        /// <returns>A task representing the asynchronous operation and containing the list of category.</returns>
+        /// <returns>A task representing the asynchronous operation and containing the list of categories.</returns>
         Task<IEnumerable<Category>> GetCategoriesAsync();
+        
+        /// <summary>
+        /// Asynchronously retrieves a category by its ID with all the associated skills.
+        /// </summary>
+        /// <param name="CategoryId">The ID of the category to retrieve.</param>
+        /// <returns>A task representing the asynchronous operation and containing the retrieved category.</returns>
+        Task<Category?> GetCategoryWithSkillsAsync(int CategoryId);
+
+        /// <summary>
+        /// Asynchronously retrieves a list of category.
+        /// </summary>
+        /// <returns>A task representing the asynchronous operation and containing the list of categories with all the associated skills.</returns>
+        Task<IEnumerable<Category>> GetCategoriesWithSkillsAsync();
 
         /// <summary>
         /// Asynchronously creates a new category.

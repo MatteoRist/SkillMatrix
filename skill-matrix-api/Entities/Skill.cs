@@ -14,9 +14,6 @@ namespace skill_matrix_api.Entities
         [Required]
         public int CategoryId { get; set; }
 
-        //[ForeignKey("CategoryId")]
-        //public Category? Category { get; set; }
-
         [Required]
         [MaxLength(50)]
         public string Title { get; set; } = string.Empty;

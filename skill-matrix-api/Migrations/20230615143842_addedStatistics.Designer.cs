@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using skill_matrix_api.DbContexts;
 
@@ -10,9 +11,11 @@ using skill_matrix_api.DbContexts;
 namespace skill_matrix_api.Migrations
 {
     [DbContext(typeof(MatrixContext))]
-    partial class MatrixContextModelSnapshot : ModelSnapshot
+    [Migration("20230615143842_addedStatistics")]
+    partial class addedStatistics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,6 +119,12 @@ namespace skill_matrix_api.Migrations
 
             modelBuilder.Entity("skill_matrix_api.Entities.Statistic", b =>
                 {
+                    b.Property<int>("StatisticId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatisticId"));
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -128,6 +137,8 @@ namespace skill_matrix_api.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.HasKey("StatisticId");
 
                     b.HasIndex(new[] { "UserId", "CategoryId" }, "IX_UniqueStatistic")
                         .IsUnique();

@@ -19,5 +19,11 @@ namespace skill_matrix_api.Services
         /// </summary>
         /// <returns>A task representing the asynchronous operation and containing the list of users.</returns>
         Task<IEnumerable<User>> GetUsersAsync();
+
+        /// <summary>
+        /// Asynchronously retrieves user's statistics.
+        /// </summary>
+        /// <returns>A task representing the asynchronous operation and containing the list of statistics.</returns>
+        Task<IEnumerable<Statistic>> GetUserStatisticsAsync(int UserId);
     }
 }

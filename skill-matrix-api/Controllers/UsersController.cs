@@ -33,11 +33,19 @@ namespace skill_matrix_api.Controllers
         [HttpGet("{UserId}", Name = "GetUser")]
         public async Task<ActionResult<User>> GetUser(int UserID)
         {
-            var userToReturn = await _dataStore.GetUserAsync(UserID);
+            var user = await _dataStore.GetUserAsync(UserID);
 
-            if(userToReturn == null) { return NotFound(); }
+            if(user == null) { return NotFound(); }
 
-            return Ok(userToReturn);
+            return Ok(user);
+        }
+
+        [HttpGet("{UserId}/statistics")]
+        public async Task<ActionResult<ICollection<Statistic>>> GetUserStatistic(int UserID)
+        {
+            var stats = await _dataStore.GetUserStatisticsAsync(UserID);
+
+            return Ok(stats);
         }
     }
 }

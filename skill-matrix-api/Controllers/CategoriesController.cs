@@ -23,7 +23,7 @@ namespace skill_matrix_api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return Ok(await _dataStore.GetCategoriesAsync());
+            return Ok(await _dataStore.GetCategoriesWithSkillsAsync());
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace skill_matrix_api.Controllers
         [HttpGet("{CategoryId}", Name = "GetCategory")]
         public async Task<ActionResult<Category>> GetCategory(int CategoryId)
         {
-            var categoryToReturn = await _dataStore.GetCategoryAsync(CategoryId);
+            var categoryToReturn = await _dataStore.GetCategoryWithSkillsAsync(CategoryId);
 
             if (categoryToReturn == null) { return NotFound(); }
 

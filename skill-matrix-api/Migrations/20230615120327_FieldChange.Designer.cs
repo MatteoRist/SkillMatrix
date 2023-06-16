@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using skill_matrix_api.DbContexts;
 
@@ -10,9 +11,11 @@ using skill_matrix_api.DbContexts;
 namespace skill_matrix_api.Migrations
 {
     [DbContext(typeof(MatrixContext))]
-    partial class MatrixContextModelSnapshot : ModelSnapshot
+    [Migration("20230615120327_FieldChange")]
+    partial class FieldChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,9 +88,6 @@ namespace skill_matrix_api.Migrations
 
                     b.HasKey("RecordId");
 
-                    b.HasIndex(new[] { "UserId", "SkillId", "QuestionId" }, "IX_UniqueRecord")
-                        .IsUnique();
-
                     b.ToTable("Records");
                 });
 
@@ -112,27 +112,6 @@ namespace skill_matrix_api.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("skill_matrix_api.Entities.Statistic", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StatValue")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasIndex(new[] { "UserId", "CategoryId" }, "IX_UniqueStatistic")
-                        .IsUnique();
-
-                    b.ToTable("Statistics");
                 });
 
             modelBuilder.Entity("skill_matrix_api.Entities.User", b =>

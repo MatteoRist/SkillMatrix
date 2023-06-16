@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using skill_matrix_api.DbContexts;
 
@@ -10,9 +11,11 @@ using skill_matrix_api.DbContexts;
 namespace skill_matrix_api.Migrations
 {
     [DbContext(typeof(MatrixContext))]
-    partial class MatrixContextModelSnapshot : ModelSnapshot
+    [Migration("20230615144806_fixedStatistics")]
+    partial class fixedStatistics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

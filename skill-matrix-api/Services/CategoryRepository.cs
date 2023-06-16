@@ -23,14 +23,31 @@ namespace skill_matrix_api.Services
         {
             return await _context.Category
                 .Where(c => c.CategoryId == CategoryId)
-                .Include(c => c.Skills)
                 .FirstOrDefaultAsync();
         }
 
         /// <inheritdoc cref="ICategoryRepository.GetCategoriesAsync"/>
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            return await _context.Category.ToListAsync();
+            return await _context.Category
+                .ToListAsync();
+        }
+
+        /// <inheritdoc cref="ICategoryRepository.GetCategoryWithSkillsAsync"/>
+        public async Task<Category?> GetCategoryWithSkillsAsync(int CategoryId)
+        {
+            return await _context.Category
+                .Where(c => c.CategoryId == CategoryId)
+                .Include(c => c.Skills)
+                .FirstOrDefaultAsync();
+        }
+
+        /// <inheritdoc cref="ICategoryRepository.GetCategoriesWithSkillsAsync"/>
+        public async Task<IEnumerable<Category>> GetCategoriesWithSkillsAsync()
+        {
+            return await _context.Category
+                .Include(c => c.Skills)
+                .ToListAsync();
         }
 
         /// <inheritdoc cref="ICategoryRepository.PostCategoryAsync"/>
