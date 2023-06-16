@@ -1,7 +1,7 @@
 // Declaration of gloabls
 
 declare interface User {
-    userID: number;
+    userId: number;
     name: string;
     email: string;
 }
@@ -19,7 +19,23 @@ declare interface Skill {
 
 declare interface Question {
     questionId: number;
-    body: sstring;
+    body: string;
     minValue: number;
     maxValue: number;
 }
+
+declare interface MatrixRecord {
+    recordId: number;
+    userId: number;
+    skillId: number;
+    questionId: number;
+    value: number;
+}
+
+declare interface Statistic {
+    userId: number;
+    cateogryId: number;
+    categoryName: string;
+    statValue: number;
+}
+

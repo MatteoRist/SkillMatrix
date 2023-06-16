@@ -1,10 +1,16 @@
 import { Box, Card, Grid, Typography, useTheme } from "@mui/material";
+import { FC } from "react";
 import { Link } from 'react-router-dom';
 import { AppLinksDict } from "../../routingData";
 import { tokens } from "../../theme";
 import RadarChart from "../RadarChart/RadarChart";
 
-const Skills = () => {
+interface SkillsProps {
+    chartLabels: string[];
+    chartData: number[];
+}
+
+const Skills: FC<SkillsProps> = ({ chartLabels, chartData }) => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -25,8 +31,8 @@ const Skills = () => {
                         alignItems="stretch" sx={{ p: 3 }}
                     >
                         <RadarChart
-                            labels={['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6']}
-                            data={[10, 50, 30, 50, 20, 80]}
+                            labels={chartLabels}
+                            data={chartData}
                         />
                     </Box>
                 </Card>
