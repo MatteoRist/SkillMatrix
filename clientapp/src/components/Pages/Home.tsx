@@ -1,8 +1,18 @@
-import { Avatar, Box, Card, CardActionArea, CardContent, Grid, Typography, useTheme } from '@mui/material';
-import { FC } from 'react';
+import {
+    Avatar,
+    Box,
+    ButtonBase,
+    Card,
+    CardActionArea,
+    CardContent,
+    Grid,
+    IconButton,
+    Typography,
+    useTheme
+} from '@mui/material';
+import React, {FC, ReactElement} from 'react';
 import { Link } from 'react-router-dom';
 import { tokens } from '../../theme';
-import RadarChart from '../RadarChart/RadarChart';
 import { AppLinksDict } from '../../routingData';
 
 
@@ -11,10 +21,11 @@ interface HomeProps {
     avatar: string; // URL of the profile picture
     userName: string;
     userRole: string;
+    chart: ReactElement
     // add any other props you need for the radar chart
 }
 
-const Home: FC<HomeProps> = ({ avatar, userName, userRole }) => {
+const Home: FC<HomeProps> = ({ avatar, userName, userRole , chart}) => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -39,7 +50,7 @@ const Home: FC<HomeProps> = ({ avatar, userName, userRole }) => {
                 </Grid>
 
                 {/* Radar Chart View */}
-                <Grid item xs={6}>
+                <Grid item xs={5}>
                     <Card component={Link} to={AppLinksDict['skills'].path}>
                         <Box
                             bgcolor={colors.primary[400]}
@@ -47,32 +58,30 @@ const Home: FC<HomeProps> = ({ avatar, userName, userRole }) => {
                             justifyContent="center"
                             alignItems="stretch" sx={{ p: 3 }}
                         >
-                            <RadarChart
-                                labels={ ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'] }
-                                data={ [10, 50, 30, 50, 20, 80] }
-                            />
+                            {chart}
                         </Box>
                     </Card>
                 </Grid>
 
                 {/* Surveys Portal */}
+
                 <Grid item xs={6}>
-                    <Card>
-                        <CardActionArea component={Link} to={AppLinksDict['surveys'].path} >
-                            <CardContent>
-                                <Box display="flex" flexDirection="column" alignItems="center">
-                                    {
-                                        AppLinksDict['surveys'].icon
-                                    }
-                                    <Typography variant="h5" component="div" gutterBottom>
-                                        {AppLinksDict['surveys'].name}
-                                    </Typography>
-                                    <Typography variant="h6" color={colors.grey[100]}>
-                                        Check out new surveys
-                                    </Typography>
-                                </Box>
-                            </CardContent>
-                        </CardActionArea>
+                    <Card sx={{ maxWidth: 345 }}>
+                        <CardActionArea component={Link} to={AppLinksDict['surveys'].path}>
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <IconButton style={{ fontSize: 50 }}>
+                                    {AppLinksDict['surveys'].icon}
+                                </IconButton>
+                                <CardContent>
+                                        <Typography gutterBottom variant="h5" component="div" align="center">
+                                            {AppLinksDict['surveys'].name}
+                                        </Typography>
+                                        <Typography variant="h6" component="div" align="center">
+                                            Check out new surveys
+                                        </Typography>
+                                </CardContent>
+                            </Box>
+                    </CardActionArea>
                     </Card>
                 </Grid>
             </Grid>

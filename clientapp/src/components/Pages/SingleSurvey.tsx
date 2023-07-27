@@ -48,7 +48,7 @@ const SingleSurvey: React.FC<SingleSurveyProps> = ({ questions, sendRecords }) =
     return (
         <Box sx={{ m: 3 }}>
             <Typography variant="h4">{skill}</Typography>
-            <Typography variant="body1">{question.body}</Typography>
+            <Typography variant="body1">{question.body.replace('{}', skill || '')}</Typography>
             {
                 (optionsRange > 5) ?
                     (

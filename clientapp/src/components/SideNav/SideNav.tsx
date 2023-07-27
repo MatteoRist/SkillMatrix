@@ -10,9 +10,11 @@ import { IAppLinks } from "../../routingData";
 interface SideNavProps {
     navItems: IAppLinks
     avatar: string
+    name: string
+    role: string
 }
 
-const SideNav: React.FC<SideNavProps> = ({ navItems, avatar }) => {
+const SideNav: React.FC<SideNavProps> = ({ navItems, avatar, name, role }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -38,7 +40,7 @@ const SideNav: React.FC<SideNavProps> = ({ navItems, avatar }) => {
                 },
             }}
         >
-            <ProSidebar collapsed={isCollapsed}>
+            <ProSidebar collapsed={isCollapsed} breakPoint="md">
                 <Menu iconShape="square">
                     {/* LOGO AND MENU ICON */}
                     <MenuItem
@@ -81,10 +83,10 @@ const SideNav: React.FC<SideNavProps> = ({ navItems, avatar }) => {
                                     fontWeight="bold"
                                     sx={{ m: "10px 0 0 0" }}
                                 >
-                                    Ed Roh
+                                    { name }
                                 </Typography>
                                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                                    VP Fancy Admin
+                                    { role }
                                 </Typography>
                             </Box>
                         </Box>

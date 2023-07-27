@@ -36,7 +36,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddDbContext<MatrixContext>(
     dbContextOptions =>
-    dbContextOptions.UseSqlServer("Data Source=DELLTTRG1;Initial Catalog=skillMatrix;Integrated Security=True;Trust Server Certificate=True"
+    dbContextOptions.UseSqlServer("Data Source=DESKTOP-ED4RQ2D;Initial Catalog=skillmatrix;Integrated Security=True;Trust Server Certificate=True"
+    //"Data Source=DELLTTRG1;Initial Catalog=skillMatrix;Integrated Security=True;Trust Server Certificate=True"
 ));
 
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

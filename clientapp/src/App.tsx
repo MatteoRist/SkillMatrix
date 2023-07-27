@@ -14,6 +14,7 @@ import { apiUrl } from './constants'
 import { Box, CssBaseline, Theme, ThemeProvider } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ColorModeContext, useMode } from './theme';
+import RadarChart from "./components/RadarChart/RadarChart";
 
 export default function App() {
     // set up theme from theme.tsx
@@ -31,10 +32,10 @@ export default function App() {
 
     // fetch data from api using MatrixApi
     useEffect(() => {
-        matrixApi.getUser(1).then(setUserData);
-        matrixApi.getSkillsAndCategories().then(setSkillsData);
-        matrixApi.getQuestions().then(setQuestionsData);
-        matrixApi.getStatistics(1).then(setUserStatisticsData);
+        matrixApi.getUser(1).then(setUserData).catch(console.log);
+        matrixApi.getSkillsAndCategories().then(setSkillsData).catch(console.log);
+        matrixApi.getQuestions().then(setQuestionsData).catch(console.log);
+        matrixApi.getStatistics(1).then(setUserStatisticsData).catch(console.log);
     }, [matrixApi]);
 
     // define handle to add records, useCallback to cash the function body and not evalueate it again on re-render
@@ -60,7 +61,7 @@ export default function App() {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <div className="app">
-                    <SideNav navItems={AppLinks} avatar={avatar} />
+                    <SideNav navItems={AppLinks} avatar={avatar} name={userData?.name || ''} role={userData?.email || ''}/>
                     <Box
                         component="main"
                         className="content"
@@ -71,8 +72,14 @@ export default function App() {
                             {
                                 (userData && skillsData && questionsData && userStatisticsData) ?
                                     <>
-                                        <Route path="/" index element={<Home avatar={avatar} userName={userData.name} userRole={userData.email} />} />
-                                        <Route path="skills" element={<Skills chartLabels={userStatisticsData.map(stat => stat.categoryName)} chartData={userStatisticsData.map(stat => stat.statValue)} />} />
+                                        <Route path="/" index element={<Home avatar={avatar} userName={userData.name} userRole={userData.email} chart={<RadarChart
+                                            labels={userStatisticsData.map(stat => stat.categoryName)}
+                                            data={userStatisticsData.map(stat => stat.statValue)}
+                                        />} />} />
+                                        <Route path="skills" element={<Skills chart={<RadarChart
+                                            labels={userStatisticsData.map(stat => stat.categoryName)}
+                                            data={userStatisticsData.map(stat => stat.statValue)}
+                                        />}/>}/>
                                         <Route path="profile" element={<Profile />} />
                                         <Route path="surveys" element={<Surveys skills={skillsData} setSelectedSkill={setSelectedSkill} />} />
                                         <Route path="singlesurvey/:skill" element={<SingleSurvey questions={questionsData} sendRecords={handleAddRecords} />} />

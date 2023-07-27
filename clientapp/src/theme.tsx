@@ -216,6 +216,18 @@ export const themeSettings = (mode: PaletteMode) => {
                     },
                 },
             },
+            MuiCardActionArea : {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: colors.blueAccent[700],
+                        color: colors.primary[100],
+                        '&:hover': {
+                            backgroundColor: colors.blueAccent[500],
+                            color: colors.primary[100],
+                        },
+                    },
+                },
+            },
             MuiRadio: {
                 styleOverrides: {
                     root: {

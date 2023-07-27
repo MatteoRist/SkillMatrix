@@ -14,13 +14,13 @@ interface IAppLink {
 
 
 const AppLinks: IAppLink[] = [
-    { path: "/", name: "Home", icon: <HomeOutlinedIcon />, directNavigation: true},
+    { path: "/", name: "Home", icon: <HomeOutlinedIcon fontSize="inherit" />, directNavigation: true},
     { path: "/login", name: "Login", icon: null, directNavigation: false },
-    { path: "/skills", name: "Skills", icon: <SchoolOutlinedIcon />, directNavigation: true },
-    { path: "/surveys", name: "Surveys", icon: <DescriptionOutlinedIcon />, directNavigation: true },
+    { path: "/skills", name: "Skills", icon: <SchoolOutlinedIcon fontSize="inherit" />, directNavigation: true },
+    { path: "/surveys", name: "Surveys", icon: <DescriptionOutlinedIcon fontSize="inherit"/>, directNavigation: true },
     { path: "/singlesurvey", name: "SingleSurvey", icon: null, directNavigation: false },
-    { path: "/profile", name: "Profile", icon: <AccountCircleOutlinedIcon />, directNavigation: true },
-    { path: "/settings", name: "Settings", icon: <SettingsIcon />, directNavigation: true }
+    { path: "/profile", name: "Profile", icon: <AccountCircleOutlinedIcon fontSize="inherit"/>, directNavigation: true },
+    { path: "/settings", name: "Settings", icon: <SettingsIcon fontSize="inherit"/>, directNavigation: true }
 ]
 
 const AppLinksDict : { [key: string]: IAppLink } = AppLinks.reduce((acc, link) => {

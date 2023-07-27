@@ -1,16 +1,15 @@
 import { Box, Card, Grid, Typography, useTheme } from "@mui/material";
-import { FC } from "react";
+import {FC, ReactElement} from "react";
 import { Link } from 'react-router-dom';
 import { AppLinksDict } from "../../routingData";
 import { tokens } from "../../theme";
 import RadarChart from "../RadarChart/RadarChart";
 
 interface SkillsProps {
-    chartLabels: string[];
-    chartData: number[];
+    chart: ReactElement
 }
 
-const Skills: FC<SkillsProps> = ({ chartLabels, chartData }) => {
+const Skills: FC<SkillsProps> = ({ chart }) => {
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -30,10 +29,7 @@ const Skills: FC<SkillsProps> = ({ chartLabels, chartData }) => {
                         justifyContent="center"
                         alignItems="stretch" sx={{ p: 3 }}
                     >
-                        <RadarChart
-                            labels={chartLabels}
-                            data={chartData}
-                        />
+                        {chart}
                     </Box>
                 </Card>
             </Grid>

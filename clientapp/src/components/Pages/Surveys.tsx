@@ -15,7 +15,7 @@ const Surveys: React.FC<SurveyProps> = ({ skills, setSelectedSkill }) => {
         <Box sx={{ m: 2 }}>
             {skills.map((category) => (
                 <div key={category.categoryId}>
-                    <Typography variant="h2">{category.name}</Typography>
+                    <Typography variant="h2" mt={5} mb={3}>{category.name}</Typography>
                     <Grid container spacing={3}>
                         {category.skills.map((skill) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} key={skill.skillId}>
