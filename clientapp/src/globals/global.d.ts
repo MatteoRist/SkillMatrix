@@ -1,4 +1,4 @@
-// Declaration of gloabls
+// Declaration of globals
 
 declare interface User {
     userId: number;
@@ -34,7 +34,7 @@ declare interface MatrixRecord {
 
 declare interface Statistic {
     userId: number;
-    cateogryId: number;
+    CategoryId: number;
     categoryName: string;
     statValue: number;
 }
