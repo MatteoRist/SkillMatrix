@@ -15,6 +15,7 @@ import { Box, CssBaseline, Theme, ThemeProvider } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ColorModeContext, useMode } from './theme';
 import RadarChart from "./components/RadarChart/RadarChart";
+import {Category} from "@mui/icons-material";
 
 export default function App() {
     // set up theme from theme.tsx
@@ -26,19 +27,86 @@ export default function App() {
     // states
     const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
     const [userData, setUserData] = useState<User | null>(null);
-    const [skillsData, setSkillsData] = useState<Category[] | null>(null);
-    const [questionsData, setQuestionsData] = useState<Question[] | null>(null);
-    const [userStatisticsData, setUserStatisticsData] = useState<Statistic[] | null>(null);
+    const [skillsData, setSkillsData] = useState<Category[] | []>([]);
+    const [filteredSkillsData, setFilteredSkillsData] = useState<Category[] | []>([]);
+    const [questionsData, setQuestionsData] = useState<Question[] | []>([]);
+    const [recordsData, setRecordsData] = useState<MatrixRecord[] | []>([]);
+    const [userStatisticsData, setUserStatisticsData] = useState<Statistic[] | []>([]);
 
     // fetch data from api using MatrixApi
-    useEffect(() => {
-        matrixApi.getUser(1).then(setUserData).catch(console.log);
-        matrixApi.getSkillsAndCategories().then(setSkillsData).catch(console.log);
-        matrixApi.getQuestions().then(setQuestionsData).catch(console.log);
-        matrixApi.getStatistics(1).then(setUserStatisticsData).catch(console.log);
-    }, [matrixApi]);
+    let fetchData = () => {
+        // fetch user data
+        let userDataPromise = matrixApi.getUser(1).catch(console.log);
 
-    // define handle to add records, useCallback to cash the function body and not evalueate it again on re-render
+        // fetch questions
+        let QuestionsDataPromise = matrixApi.getQuestions().catch(console.log);
+
+        // fetch skills
+        let skillsDataPromise = matrixApi.getSkillsAndCategories().catch(console.log);
+
+        // fetch user statistics
+        let statisticsDataPromise = matrixApi.getStatistics(1).catch(console.log);
+
+        Promise.all([
+            userDataPromise,
+            QuestionsDataPromise,
+            skillsDataPromise,
+            statisticsDataPromise
+        ]).then((values: any[]) => {
+
+            let [userData, questionsData, skillsData, userStatisticsData] = values
+
+            setUserData(userData);
+            setQuestionsData(questionsData);
+            setSkillsData(skillsData);
+            setUserStatisticsData(userStatisticsData);
+
+            matrixApi.getRecords(userData?.userId || 0)
+                .then((recordsData) =>{
+
+                    setRecordsData(recordsData)
+
+                    matrixApi.getRecords(userData?.userId || 0).then(setRecordsData).catch(console.log);
+
+                    const countOccurrences = (arr: any[], val: any) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+
+                    let recordedSkills = recordsData.map(record => record.skillId);
+
+                    let filteredCategories = []
+
+                    for (const category of skillsData) {
+
+                        let filteredSkills = []
+
+                        for (const skill of category.skills) {
+                            //console.log(recordedSkills)
+                            //console.log(skill.skillId)
+                            if (countOccurrences(recordedSkills, skill.skillId) < questionsData.length){
+
+                                filteredSkills.push(skill)
+                            }
+                        }
+
+                        if (filteredSkills.length){
+
+                            category.skills = filteredSkills
+                            filteredCategories.push(category)
+                        }
+                    }
+
+                    setFilteredSkillsData(filteredCategories);
+                })
+                .catch(console.log);
+        })
+
+    };
+
+    //componentDidMount
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    // define handle to add records, useCallback to cash the function body and not evaluate it again on re-render
     const handleAddRecords = useCallback((questionIds: number[], answers: number[]) => {
         const matrixRecordList: MatrixRecord[] = answers.map((answer, index) => ({
             recordId: 0,
@@ -49,9 +117,10 @@ export default function App() {
         }));
 
         matrixApi.addRecords(matrixRecordList).then(() => {
-            // TODO: Handle successful addition of records.
+
+            fetchData();
         }).catch(error => {
-            // TODO: Handle errors.
+
             console.error('Error occurred while adding records:', error);
         });
     }, [matrixApi, userData, selectedSkill]);
@@ -81,7 +150,7 @@ export default function App() {
                                             data={userStatisticsData.map(stat => stat.statValue)}
                                         />}/>}/>
                                         <Route path="profile" element={<Profile />} />
-                                        <Route path="surveys" element={<Surveys skills={skillsData} setSelectedSkill={setSelectedSkill} />} />
+                                        <Route path="surveys" element={<Surveys skills={filteredSkillsData} setSelectedSkill={setSelectedSkill} />} />
                                         <Route path="singlesurvey/:skill" element={<SingleSurvey questions={questionsData} sendRecords={handleAddRecords} />} />
                                     </> :
                                     <Route path="/" index element={<Navigate to="/" replace />}></Route>

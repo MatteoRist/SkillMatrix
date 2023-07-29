@@ -32,6 +32,18 @@ namespace skill_matrix_api.Services
                 .ToListAsync();
         }
 
+        /// <inheritdoc cref="IRecordRepository.GetRecordsAsync"/>
+        public async Task<IEnumerable<Record>> GetRecordsAsync(int UserId)
+        {
+            if (UserId > 0)
+            {
+                return await _context.Records
+                .Where(r => r.UserId == UserId)
+                .ToListAsync();
+            }
+            return await GetRecordsAsync();
+        }
+
         /// <inheritdoc cref="IRecordRepository.PostRecordAsync"/>
         public async Task PostRecordAsync(Record record)
         {

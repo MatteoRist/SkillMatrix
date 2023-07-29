@@ -28,6 +28,13 @@ namespace skill_matrix_api.Services
         Task<IEnumerable<Record>> GetRecordsAsync();
 
         /// <summary>
+        /// Asynchronously retrieves a list of records filtered by user.
+        /// </summary>
+        /// <param name="UserId">The ID of the user to filter by.</param>
+        /// <returns>A task representing the asynchronous operation and containing the list of records.</returns>
+        Task<IEnumerable<Record>> GetRecordsAsync(int UserId);
+
+        /// <summary>
         /// Asynchronously creates a new record.
         /// </summary>
         /// <param name="record">The record object to create.</param>

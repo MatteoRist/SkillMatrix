@@ -23,6 +23,10 @@ export class MatrixApi {
     getQuestions = () =>
         axios.get<Question[]>(`${this.baseUrl}/questions`).then((response) => response.data);
 
+    // Fetch Records
+    getRecords = (userId: number) =>
+        axios.get<MatrixRecord[]>(`${this.baseUrl}/records?UserId=${userId}`).then((response) => response.data);
+
     // Add Record
     addRecords = (records: MatrixRecord[]) =>
         axios.post(`${this.baseUrl}/records/bulk`, records).then((response) => response.data);

@@ -35,10 +35,10 @@ namespace Record_matrix_api.Controllers
         /// </summary>
         /// <returns>An action result containing the list of records.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Record>>> GetRecords()
+        public async Task<ActionResult<IEnumerable<Record>>> GetRecords([FromQuery] int UserId)
         {
             // get records
-            IEnumerable<Record> records = await _recordRepo.GetRecordsAsync();
+            IEnumerable<Record> records = await _recordRepo.GetRecordsAsync(UserId);
 
             return Ok(records);
         }
