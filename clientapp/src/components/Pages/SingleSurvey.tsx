@@ -42,17 +42,19 @@ const SingleSurvey: React.FC<SingleSurveyProps> = ({ questions, sendRecords }) =
             setAnswers([...answers, answer]);
             setQuestionIds([...questionIds, question.questionId])
             setCurrentQuestion(currentQuestion + 1);
+            setSelectedAnswer(null);
         }
     }
 
     return (
-        <Box sx={{ m: 3 }}>
-            <Typography variant="h4">{skill}</Typography>
-            <Typography variant="body1">{question.body.replace('{}', skill || '')}</Typography>
+        <Box sx={{display: 'flex', m: 5, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'column'}}>
+            <Typography variant="h2" align="center" mb={5}>{skill}</Typography>
+            <Typography variant="h4" align="center">{question.body.replace('{}', skill || '')}</Typography>
             {
                 (optionsRange > 5) ?
                     (
                         <Slider
+                            sx={{my: 5}}
                             min={question.minValue}
                             max={question.maxValue}
                             onChange={(event, value) => setSelectedAnswer(value as number)}
@@ -60,12 +62,21 @@ const SingleSurvey: React.FC<SingleSurveyProps> = ({ questions, sendRecords }) =
                         />
                     ) :
                     (
-                        <RadioGroup value={selectedAnswer} onChange={(event) => setSelectedAnswer(Number(event.target.value))}>
+                        <RadioGroup
+                            sx={{my: 5, fontSize: 400}}
+                            value={selectedAnswer}
+                            onChange={(event) => setSelectedAnswer(Number(event.target.value))}
+                        >
                             {Array.from({ length: optionsRange }, (_, i) => i + question.minValue).map(option => (
                                 <FormControlLabel
                                     key={option}
                                     value={option}
-                                    control={<Radio />}
+                                    control={<Radio sx={{
+                                        color: colors.greenAccent[800],
+                                        '&.Mui-checked': {
+                                            color: colors.greenAccent[600],
+                                        },
+                                    }}/>}
                                     label={option}
                                 />
                             ))}
