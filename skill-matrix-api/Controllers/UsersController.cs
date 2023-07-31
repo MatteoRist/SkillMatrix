@@ -1,25 +1,51 @@
 using Microsoft.AspNetCore.Mvc;
-using skill_matrix_api.Models.Users;
+using skill_matrix_api.Entities;
+using skill_matrix_api.Services;
 
 namespace skill_matrix_api.Controllers
 {
     [ApiController]
-    [Route("api/users")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/users")]
     public class UsersController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
-        {
-            return Ok(DataMapper.MapToDto(UsersDataStore.Current.Users));
+        private readonly IUserRepository _dataStore;
+        public UsersController(IUserRepository dataStore) 
+        { 
+            _dataStore = dataStore ?? throw new ArgumentNullException(nameof(dataStore));
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<UserDto> getUser(int id) {
-            var userToReturn = UsersDataStore.Current.Users.FirstOrDefault(c => c.UserId == id);
+        /// <summary>
+        /// Retrieves a list of users.
+        /// </summary>
+        /// <returns>An action result containing the list of users.</returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            return Ok(await _dataStore.GetUsersAsync());
+        }
 
-            if(userToReturn == null) { return NotFound(); }
+        /// <summary>
+        /// Retrieves a specific user by its ID.
+        /// </summary>
+        /// <param name="UserID">The ID of the user to retrieve.</param>
+        /// <returns>An action result containing the retrieved user.</returns>
+        [HttpGet("{UserId}", Name = "GetUser")]
+        public async Task<ActionResult<User>> GetUser(int UserID)
+        {
+            var user = await _dataStore.GetUserAsync(UserID);
 
-            return Ok(userToReturn);
+            if(user == null) { return NotFound(); }
+
+            return Ok(user);
+        }
+
+        [HttpGet("{UserId}/statistics")]
+        public async Task<ActionResult<ICollection<Statistic>>> GetUserStatistic(int UserID)
+        {
+            var stats = await _dataStore.GetUserStatisticsAsync(UserID);
+
+            return Ok(stats);
         }
     }
 }
