@@ -150,18 +150,18 @@ Skill Matrix web app's components:
     PRIMARY KEY (UserId)
     );
     
+    CREATE TABLE Category (
+    CategoryId INT IDENTITY(1,1) NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (CategoryId)
+    );
+    
     CREATE TABLE Skills (
     SkillId INT IDENTITY(1,1) NOT NULL,
     CategoryId INT NOT NULL,
     Title VARCHAR(255) NOT NULL,
     PRIMARY KEY (SkillId),
     FOREIGN KEY (CategoryId) REFERENCES Category (CategoryId)
-    );
-    
-    CREATE TABLE Category (
-    CategoryId INT IDENTITY(1,1) NOT NULL,
-    Name VARCHAR(255) NOT NULL,
-    PRIMARY KEY (CategoryId)
     );
     
     CREATE TABLE Questions (
@@ -185,7 +185,7 @@ Skill Matrix web app's components:
     );
     
     INSERT INTO Users (Name, Email) VALUES
-    ('Matteo Ristoro', 'matteo.ristoro@gmail.com');
+    ('Matteo', 'matteo.ristoro@gmail.com');
     
     INSERT INTO Questions (Body, MinValue, MaxValue) VALUES
     ('How many projects have you carried out in the last year regarding {}?', 1, 5),
